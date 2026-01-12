@@ -1,173 +1,196 @@
 from datetime import date
-from ejercicio01 import calcula_mcm
-from ejercicio02 import introduce_asteriscos
-from ejercicio03 import divide_pesos
-from ejercicio04 import calcula_gastos
-from ejercicio05 import resta_matrices
-from ejercicio06 import calcula_factura, Producto
-from ejercicio07 import busca_producto_mas_caro
-from ejercicio08 import calcula_top_categorias
+from ejercicio1 import convierte_binario_a_decimal
+from ejercicio2 import divide_cadena
+from ejercicio3 import mayor_area
+from ejercicio4 import calcula_racha_maxima
+from ejercicio5 import es_matriz_identidad
+from ejercicio6 import actualiza_stock
+from ejercicio7 import calcula_precio_total_ultimos_dias, Producto
+from ejercicio8 import categoria_mayor_gasto
 
-def test_ejercicio01():
-    print("Probando calcula_mcm...", end="")
-    assert calcula_mcm(4, 5) == 20
-    assert calcula_mcm(6, 8) == 24
-    assert calcula_mcm(7, 3) == 21
-    assert calcula_mcm(18, 12) == 36
-    assert calcula_mcm(1, 1) == 1
-    assert calcula_mcm(0, 5) == None
-    assert calcula_mcm(5, 0) == None
-    print(" OK")
+def test_convierte_binario_a_decimal():
+    print("Probando convierte_binario_a_decimal...", flush=True, end="")
+    assert convierte_binario_a_decimal("0") == 0
+    assert convierte_binario_a_decimal("1") == 1
+    assert convierte_binario_a_decimal("10") == 2
+    assert convierte_binario_a_decimal("1010") == 10
+    assert convierte_binario_a_decimal("1111") == 15
+    assert convierte_binario_a_decimal("100000") == 32
+    assert convierte_binario_a_decimal("110101") == 53
+    print("OK", flush=True)
 
-def test_ejercicio02():
-    print("Probando introduce_asteriscos...", end="")
-    assert introduce_asteriscos("abcdefghij", 4) == "abc*efg*ij"
-    assert introduce_asteriscos("Hola Mundo", 3) == "Ho*a *un*o"
-    assert introduce_asteriscos("Python", 2) == "P*t*o*"
-    assert introduce_asteriscos("Python", 1) == "******"
-    assert introduce_asteriscos("Corta", 7) == "Corta"
-    assert introduce_asteriscos("", 5) == ""
-    assert introduce_asteriscos("A", 1) == "*"
-    print(" OK")
+def test_divide_cadena():
+    print("Probando divide_cadena...", flush=True, end="")
+    assert divide_cadena("abcdefghij") == ("acegi", "bdfhj")
+    assert divide_cadena("1234567890") == ("13579", "24680")
+    assert divide_cadena("a") == ("a", "")
+    assert divide_cadena("") == ("", "")
+    assert divide_cadena("ab") == ("a", "b")
+    assert divide_cadena("abcdef") == ("ace", "bdf")
+    print("OK", flush=True)
 
-def test_ejercicio03():
-    print("Probando divide_pesos...", end="")
-    pesos = [10.0, 20.0, 15.0, 5.0, 10.0]
-    pesos_copia = pesos.copy()
-    lista1, lista2 = divide_pesos(pesos)
-    assert pesos == pesos_copia # Verifica que la lista original no se modifique
-    assert sum(lista1) == sum(lista2)
+def test_mayor_area():
+    print("Probando mayor_area...", flush=True, end="")
+    assert mayor_area([1,8,6,2,5,4,8,3,7]) == 49
+    assert mayor_area([1,1]) == 1
+    assert mayor_area([4,3,2,1,4]) == 16
+    assert mayor_area([1,2,1]) == 2
+    assert mayor_area([1,2,4,3]) == 4
+    assert mayor_area([2,3,4,5,18,17,6]) == 17  
+    assert mayor_area([]) == 0
+    assert mayor_area([5]) == 0
+    
+    # Probamos que la función no modifique la lista recibida
+    alturas = [1,8,6,2,5,4,8,3,7]
+    copia_alturas = alturas.copy()
+    mayor_area(alturas)
+    assert alturas == copia_alturas
 
-    pesos = [12.5, 7.5, 10.0, 4.0]
-    lista1, lista2 = divide_pesos(pesos)    
-    assert abs(sum(lista1) - sum(lista2)) == 1.0
+    print("OK", flush=True)
 
-    pesos = [5.0]
-    lista1, lista2 = divide_pesos(pesos)
-    assert abs(sum(lista1) - sum(lista2)) == 5.0
-
-    pesos = []
-    lista1, lista2 = divide_pesos(pesos)
-    assert lista1 == [] and lista2 == []
-    print(" OK")
-
-def test_ejercicio04():
-    print("Probando calcula_gastos...", end="")
+def test_calcula_racha_maxima():
     from datetime import date
+    print("Probando calcula_racha_maxima...", flush=True, end="")
+    assert calcula_racha_maxima([]) == 0
+    assert calcula_racha_maxima([date(2023,1,1)]) == 1
+    assert calcula_racha_maxima([date(2023,1,1), date(2023,1,2), date(2023,1,4), date(2023,1,5), date(2023,1,6)]) == 3
+    assert calcula_racha_maxima([date(2023,1,1), date(2023,1,2), date(2023,1,2), date(2023,1,4), date(2023,1,5), date(2023,1,6)]) == 3
+    assert calcula_racha_maxima([date(2023,1,13), date(2023,1,11), date(2023,1,12), date(2023,1,10)]) == 4
+    assert calcula_racha_maxima([date(2023,1,1), date(2023,1,3), date(2023,1,5)]) == 1
+    assert calcula_racha_maxima([date(2023,1,8), date(2023,1,6), date(2023,1,3), date(2023,1,2), date(2023,1,1)]) == 3
+    assert calcula_racha_maxima([date(2023,1,1), date(2023,1,2), date(2023,1,2), date(2023,1,3)]) == 3    
 
-    gasto_diario = [10.0, 12.0, 11.0, 13.0, 12.5, 14.0, 15.0]
-    fecha_inicio = date(2024, 6, 1)
-    fecha_fin = date(2024, 6, 7)
-    assert calcula_gastos(gasto_diario, fecha_inicio, fecha_fin) == 87.5
+    # Probamos que la función no modifique la lista recibida
+    fechas = [date(2023,1,1), date(2023,1,2), date(2023,1,4), date(2023,1,5), date(2023,1,6)]
+    copia_fechas = fechas.copy()
+    calcula_racha_maxima(fechas)
+    assert fechas == copia_fechas
 
-    fecha_inicio = date(2024, 6, 1)
-    fecha_fin = date(2024, 6, 30)
-    assert calcula_gastos(gasto_diario, fecha_inicio, fecha_fin) == 379.0
+    print("OK", flush=True)
 
-    fecha_inicio = date(2024, 6, 3)
-    fecha_fin = date(2024, 6, 3)
-    assert calcula_gastos(gasto_diario, fecha_inicio, fecha_fin) == 10.0
+def test_es_matriz_identidad():
+    print("Probando es_matriz_identidad...", flush=True, end="")
+    assert es_matriz_identidad([[1,0,0],[0,1,0],[0,0,1]]) == True
+    assert es_matriz_identidad([[1,0],[0,1]]) == True
+    assert es_matriz_identidad([[1]]) == True
+    assert es_matriz_identidad([[0,0,0],[0,0,0],[0,0,0]]) == False
+    assert es_matriz_identidad([[1,0,0],[0,0,0],[0,0,1]]) == False
+    assert es_matriz_identidad([[1,2,0],[0,1,0],[0,0,1]]) == False
+    assert es_matriz_identidad([[1,0,0],[0,1,0]]) == False
+    assert es_matriz_identidad([]) == False   
 
-    fecha_inicio = date(2024, 6, 3)
-    fecha_fin = date(2024, 6, 2)
-    assert calcula_gastos(gasto_diario, fecha_inicio, fecha_fin) == 0.0 # Fecha inicio después de fecha fin
+    # Probamos que la función no modifique la lista recibida
+    matriz = [[1,0,0],[0,1,0],[0,0,1]]
+    copia_matriz = [fila.copy() for fila in matriz]
+    es_matriz_identidad(matriz)
+    assert matriz == copia_matriz
 
-    print(" OK")
+    print("OK", flush=True)
 
-def test_ejercicio05():
-    print("Probando resta_matrices...", end="")
-    mat1 = [[5, 8, 10],
-            [4, 6, 9],
-            [7, 3, 2]]
+def test_actualiza_stock():
+    print("Probando actualiza_stock...", flush=True, end="")
 
-    mat2 = [[1, 2, 3],
-            [4, 5, 6],
-            [7, 8, 9]]
+    ventas = [("Zumo", 1)]
+    stock = {"Zumo": 1}
+    no_vendidas = actualiza_stock(ventas, stock)
+    assert stock == {"Zumo": 0}
+    assert no_vendidas == []
 
-    resultado_esperado = [[4, 6, 7],
-                          [0, 1, 3],
-                          [0, -5, -7]]
-    
-    assert resta_matrices(mat1, mat2) == resultado_esperado
+    ventas = [("Galletas", 10)]
+    stock = {"Galletas": 5}
+    no_vendidas = actualiza_stock(ventas, stock)
+    assert stock == {"Galletas": 0}
+    assert no_vendidas == [("Galletas", 5)]
 
-    mat3 = [[1, 2],
-            [3, 4]]
-    
-    assert resta_matrices(mat1, mat3) == None
+    ventas = [("Manzana", 5), ("Pan", 3), ("Leche", 2)]
+    stock = {"Manzana": 4, "Pan": 5, "Leche": 1}
+    no_vendidas = actualiza_stock(ventas, stock)
+    assert stock == {"Manzana": 0, "Pan": 2, "Leche": 0}
+    assert no_vendidas == [("Manzana", 1), ("Leche", 1)]
 
-    assert resta_matrices([], []) == [] # La suma de dos matrices vacias es una matriz vacía
-    print(" OK")
+    ventas = [("Manzana", 5), ("Pan", 3), ("Leche", 2)]
+    stock = {"Manzana": 4, "Pan": 5, "Leche": 1, "Huevos": 10}
+    no_vendidas = actualiza_stock(ventas, stock)
+    assert stock == {"Manzana": 0, "Pan": 2, "Leche": 0, "Huevos": 10}
+    assert no_vendidas == [("Manzana", 1), ("Leche", 1)]
 
-def test_ejercicio06():    
-    print("Probando calcula_factura...", end="")
+    ventas = [("Arroz", 2), ("Frijoles", 1)]
+    stock = {"Arroz": 5}
+    no_vendidas = actualiza_stock(ventas, stock)
+    assert stock == {"Arroz": 3, "Frijoles": 0}
+    assert no_vendidas == [("Frijoles", 1)]
+
+    # Probamos que la función no modifique la lista recibida
+    ventas = [("Manzana", 5), ("Pan", 3), ("Leche", 2)]
+    copia_ventas = ventas.copy()
+    stock = {"Manzana": 4, "Pan": 5, "Leche": 1}
+    actualiza_stock(ventas, stock)
+    assert ventas == copia_ventas
+
+    print("OK", flush=True)
+
+def test_calcula_precio_total_ultimos_dias():    
+    print("Probando calcula_precio_total_ultimos_dias...", flush=True, end="")   
+
     productos = [
-        Producto(nombre="Camisa", categoria="Ropa", precio=20.0),
-        Producto(nombre="Pantalón", categoria="Ropa", precio=30.0),
-        Producto(nombre="Libro", categoria="Cultura", precio=15.0),
-        Producto(nombre="Película", categoria="Cultura", precio=25.0),
-        Producto(nombre="Comida", categoria="Alimentos", precio=10.0)
+        Producto("Leche", "Lácteos", 1.5, date(2024, 6, 20)),
+        Producto("Pan", "Panadería", 1.0, date(2024, 6, 18)),
+        Producto("Queso", "Lácteos", 3.0, date(2024, 6, 15)),
+        Producto("Manzanas", "Frutas", 2.5, date(2024, 6, 10)),
     ]
-    iva_por_categoria = {
-        "Ropa": 0.10,
-        "Cultura": 0.04
-    }
-    factura = calcula_factura(productos, iva_por_categoria)
+    fecha_actual = date(2024, 6, 21)
+
+    assert calcula_precio_total_ultimos_dias(productos, 2, fecha_actual) == 1.5
+    assert calcula_precio_total_ultimos_dias(productos, 4, fecha_actual) == 2.5
+    assert calcula_precio_total_ultimos_dias(productos, 9, fecha_actual) == 5.5
+    assert calcula_precio_total_ultimos_dias(productos, 14, fecha_actual) == 8
+    assert calcula_precio_total_ultimos_dias([], 6, fecha_actual) == 0.0
+    assert calcula_precio_total_ultimos_dias(productos, 0, fecha_actual) == 0
+
+    # Probamos que la función no modifique la lista recibida
+    copia_productos = productos.copy()
+    calcula_precio_total_ultimos_dias(productos, 7, fecha_actual)
+    assert productos == copia_productos
     
-    assert abs(factura["Ropa"] - (20.0 * 1.10 + 30.0 * 1.10)) < 1e-6
-    assert abs(factura["Cultura"] - (15.0 * 1.04 + 25.0 * 1.04)) < 1e-6
-    assert abs(factura["Alimentos"] - (10.0 * 1.21)) < 1e-6
-    print(" OK")
-    
-def test_ejercicio07():    
-    print("Probando busca_producto_mas_caro...", end="")
+    print("OK", flush=True)
+
+def test_categoria_mayor_gasto():
+    print("Probando categoria_mayor_gasto...", flush=True, end="")   
+
     productos = [
-        Producto(nombre="Camisa", categoria="Ropa", precio=20.0),
-        Producto(nombre="Pantalón", categoria="Ropa", precio=30.0),
-        Producto(nombre="Libro", categoria="Cultura", precio=15.0),
-        Producto(nombre="Película", categoria="Cultura", precio=25.0),
-        Producto(nombre="Comida", categoria="Alimentos", precio=10.0)
+        Producto("Leche", "Lácteos", 1.5, date(2024, 6, 20)),
+        Producto("Pan", "Panadería", 1.0, date(2024, 6, 18)),
+        Producto("Queso", "Lácteos", 3.0, date(2024, 6, 15)),
+        Producto("Manzanas", "Frutas", 2.5, date(2024, 6, 10)),
     ]
 
-    producto_mas_caro = busca_producto_mas_caro(productos)
-    assert producto_mas_caro == Producto(nombre="Pantalón", categoria="Ropa", precio=30.0)
+    assert categoria_mayor_gasto(productos) == ("Lácteos", 4.5)
+    assert categoria_mayor_gasto([]) is None
 
-    producto_mas_caro_ropa = busca_producto_mas_caro(productos, categoria="Cultura")
-    assert producto_mas_caro_ropa == Producto(nombre="Película", categoria="Cultura", precio=25.0)
-
-    producto_mas_caro_ropa = busca_producto_mas_caro(productos, categoria="Alimentos")
-    assert producto_mas_caro_ropa == Producto(nombre="Comida", categoria="Alimentos", precio=10.0)
-
-    producto_no_existente = busca_producto_mas_caro(productos, categoria="Electrónica")
-    assert producto_no_existente == None
-
-    productos_vacios = []
-    assert busca_producto_mas_caro(productos_vacios) == None
-    print(" OK")
-
-def test_ejercicio08():    
-    print("Probando calcula_top_categorias...", end="")
     productos = [
-        Producto(nombre="Camisa", categoria="Ropa", precio=20.0),
-        Producto(nombre="Pantalón", categoria="Ropa", precio=30.0),
-        Producto(nombre="Libro", categoria="Cultura", precio=15.0),
-        Producto(nombre="Película", categoria="Cultura", precio=25.0),
-        Producto(nombre="Comida", categoria="Alimentos", precio=10.0)
+        Producto("Producto1", "Cat1", 10.0, date(2024, 1, 1)),
+        Producto("Producto2", "Cat2", 20.0, date(2024, 1, 2)),
+        Producto("Producto3", "Cat1", 15.0, date(2024, 1, 3)),
+        Producto("Producto4", "Cat3", 5.0, date(2024, 1, 4)),
     ]
-    top_categorias = calcula_top_categorias(productos, n=2)
-    assert top_categorias == [("Ropa", 50.0), ("Cultura", 40.0)]
+    assert categoria_mayor_gasto(productos) == ("Cat1", 25.0)
 
-    top_categorias = calcula_top_categorias(productos, n=3)
-    assert top_categorias == [("Ropa", 50.0), ("Cultura", 40.0), ("Alimentos", 10.0)]
+    # Probamos que la función no modifique la lista recibida
+    copia_productos = productos.copy()
+    categoria_mayor_gasto(productos)
+    assert productos == copia_productos
 
-    print(" OK")
+    print("OK", flush=True)
 
+###############################################
+# Descomenta las pruebas que quieras ejecutar #
+###############################################
 
-test_ejercicio01()
-test_ejercicio02()
-test_ejercicio03()
-test_ejercicio04()
-test_ejercicio05()
-test_ejercicio06()
-test_ejercicio07()
-test_ejercicio08()
-print("Todos los tests pasaron correctamente.")
+test_convierte_binario_a_decimal()
+test_divide_cadena()
+#test_mayor_area()
+#test_calcula_racha_maxima()
+test_es_matriz_identidad()
+test_actualiza_stock()
+#test_calcula_precio_total_ultimos_dias()
+#test_categoria_mayor_gasto()

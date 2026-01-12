@@ -1,4 +1,4 @@
-# Examen práctico (Simulacro)
+# Examen práctico - Evaluación Continua 2025-26
 ## Fundamentos de Programación 1. Grado en Ingeniería Informática – Inteligencia Artificial (Universidad de Sevilla)
 
 ## Instrucciones
@@ -6,7 +6,7 @@
 1. Completa tu **nombre y apellidos** en el fichero `identificacion.txt`.
 2. Activa la opción **Autoguardado (Auto Save)** en el menú Archivo (File).
 3. Realiza cada ejercicio número XX en el módulo `src/ejercicioXX.py`. **No toques los prototipos de las funciones ni los comentarios de documentación**.
-4. Asegúrate de comprobar que tu implementación pasa todos los tests. Para ejecutar los tests del ejercicio número XX, descomenta la línea `#test_ejercicioXX()` que encontrarás al final del módulo `src/tests.py` y ejecútalo. 
+4. Asegúrate de comprobar que tu implementación pasa todos los tests. Para ejecutar los tests del ejercicio número XX, descomenta la línea `#test_ejercicioXX()` que encontrarás al final del módulo `src/tests.py`. 
 5. Si algún test falla, **utiliza el depurador para tratar de solucionarlo**. 
 6. Puedes ejecutar el módulo `src/calcula_nota.py` para obtener una estimación de tu nota. Ten en cuenta que se trata de una nota aproximada, ya que:
    * La nota de un ejercicio puede ser más baja, si la implementación comete errores no detectados por los tests automáticos.
@@ -16,90 +16,95 @@
 
 ### Ejercicio 1 (1,25 puntos)
 
-Implementa la función `calcula_mcm`, que recibe dos números enteros positivos (**a** y **b**) y devuelve el mínimo común múltiplo (mcm). El mcm es el número más bajo que cumple ser múltiplo de ambos números, excluyendo el 0. Por ejemplo, el mcm de 2 y 3 es el 6.
+Implementa la función `convierte_binario_a_decimal`, que recibe un número binario representado como una cadena de texto (**binario**) y devuelve su representación en sistema decimal (número entero).
 
-Si la función recibiera algún número menor o igual a 0, debe devolver `None`.
+Por ejemplo, si **binario** es `"1010"`, el resultado devuelto será `10`.
 
-Un posible algoritmo para resolverlo es el siguiente:
-1. Nuestro primer **candidato** es **b**.
-2. Si el **candidato** es múltiplo de **a**, el **candidato** es el mcm.
-3. Si no, sumamos al **candidato** el valor de **b**, y volvemos al punto 2.
-
----
+Un posible algoritmo para resolverlo sería el siguiente:
+* Inicializa una variable **resultado** con un 0.
+* Recorre los caracteres (bits) del número en binario de **derecha a izquierda**.
+    * Si el bit actual es un 1, suma al **resultado** 2 elevado a la posición actual (la posición es 0 para el primer bit empezando por la derecha, 1 para el siguiente, etc...).
+    * Si el bit actual es un 0, no se hace nada.
 
 ### Ejercicio 2 (1,25 puntos)
 
-Implementa la función `introduce_asteriscos`, que recibe un **texto** y un entero **multiplos_de** y devuelve el texto susituyendo algunos caracteres por asteriscos. Los caracteres a sustituir serán aquellos que estén en posiciones múltiplos del número indicado por el parámetro, entendiendo que el primer carácter es el que está en la posición 1.
-    
-Por ejemplo, si el **texto** es `"abcdefghij"` y **multiplos_de** es `4`, el resultado devuelto será `"abc*efg*ij"`.
+Implementa la función `divide_cadena`, que recibe un **texto** y lo divide en dos nuevas cadenas. La función debe devolver una tupla conteniendo:
+1. Una cadena formada por los caracteres que se encuentran en las posiciones pares (0, 2, 4...).
+2. Una cadena formada por los caracteres que se encuentran en las posiciones impares (1, 3, 5...).
 
----
+Por ejemplo, si el **texto** es `"abcdefghij"`, el resultado devuelto será `("acegi", "bdfhj")`.
 
 ### Ejercicio 3 (1,25 puntos)
 
-Implementa la función `divide_pesos`, que recibe una lista de números reales **pesos** y los divide en dos listas, de manera que los pesos de las dos listas obtenidas sean lo más equilibrados posible.
+Implementa la función `mayor_area`, que recibe una lista de enteros **alturas** representando paredes verticales en un plano. Debes encontrar la mayor área de agua que se puede formar eligiendo dos paredes y usando el eje X como base. Ten en cuenta que el área está limitada por la altura de la pared más baja de las dos escogidas.
 
-La función **no debe modificar la lista recibida**, sino que creará dos nuevas listas que serán devueltas.
 
-Para ello, sigue este algoritmo:
-1. Obtén una versión ordenada de la lista de **pesos** original, de mayor a menor.
-2. Recorre la lista ordenada y añade cada peso a la lista que en cada momento tenga menor peso total.        
+![imagen](image.png)
 
-Por ejemplo, si la lista de **pesos** es:
-```python
-[12.5, 7.5, 10.0, 4.0]
-```
+Por ejemplo, para las **alturas** `[1, 8, 6, 2, 5, 4, 8, 3, 7]`, la mayor área es `49`, formada entre las paredes en las posiciones 1 (altura 8) y 8 (altura 7). El cálculo sería `min(8, 7) * (8 - 1) = 7 * 7 = 49`.
 
-la función podría devolver estas dos listas:
-```python
-([12.5,4.0], [10.0, 7.5])
-```
-
----
+Puedes seguir el siguiente algoritmo:
+1. Inicializa dos variables para apuntar a la **primera** y **última** posición de la lista.
+2. Calcula el área de agua que contendrían las paredes apuntadas por **primera** y **última**:
+    * Si el área es la mayor obtenida hasta el momento, guárdala. 
+    * Si la pared apuntada por **primera** es menor que la pared apuntada por **última**, incrementamos la posición **primera**.
+    * Si no, decrementamos la posición **ultima**.
+3. Repetimos el paso 2 mientras las posiciones **primera** y **última** no se crucen.
 
 ### Ejercicio 4 (1,25 puntos)
 
-Implementa una función `calcula_gastos`, que calcula el gasto total entre una **fecha_inicio** y una **fecha_fin**, sumando el gasto de cada día. La función recibe una lista **gasto_diario** que contiene el gasto diario según el día de la semana. La lista tiene por tanto siete posiciones: 0=lunes, 1=martes, ..., 6=domingo. **No es necesario comprobar que la lista gasto_diario tiene el número de elementos esperado**.
+Implementa la función `calcula_racha_maxima`, que dada una lista de **fechas**, calcula la racha máxima de días consecutivos que aparecen en la lista.
+    
+Es importante tener en cuenta que:
+1. Las fechas pueden venir desordenadas.
+2. La lista puede contener fechas duplicadas (que no deben afectar al cálculo de la racha).
+3. Si la lista está vacía, debe devolver 0.
+4. No se debe modificar la lista de fechas recibida.
 
-Por ejemplo, si **gasto_diario** es `[10.0, 12.0, 11.0, 13.0, 12.5, 14.0, 15.0]`, la **fecha_inicio** es `date(2024, 6, 1)` y la **fecha_fin** es `date(2024, 6, 7)`, la función calcula esta suma:
+Por ejemplo, para las fechas `[2023-01-02, 2023-01-01, 2023-01-04, 2023-01-05, 2023-01-06, 2023-01-04]`, la racha máxima es `3` (correspondiente a los días 4, 5 y 6 de enero).
 
-* 1 de junio de 2024 (sábado) => suma 14.0
-* 2 de junio de 2024 (domingo) => suma 15.0
-* 3 de junio de 2024 (lunes) => suma 10.0
-* 4 de junio de 2024 (martes) => suma 12.0
-* 5 de junio de 2024 (miércoles) => suma 11.0
-* 6 de junio de 2024 (jueves) => suma 13.0
-* 7 de junio de 2024 (viernes) => suma 12.5
-
-La función devolvería el gasto total, que es `87.5`.
-
-Puedes resolverlo iterando sobre las fechas, comenzando en la **fecha_inicio** y sumando un día en cada iteración hasta llegar a la **fecha_fin**.
-
----
+Puedes seguir este algoritmo:
+* Prepara los datos eliminando duplicados y asegurando que las fechas estén en orden cronológico.
+* Recorre la colección comparando cada fecha con la siguiente:
+  * Si son días consecutivos, la racha actual aumenta.
+  * Si hay un salto en el calendario, la racha se rompe y debe reiniciarse.
+* Mantén un registro del valor de la racha más larga encontrada durante todo el proceso y devuélvelo al finalizar.
 
 ### Ejercicio 5 (1,25 puntos)
 
-Implementa la función  `resta_matrices` que recibe dos matrices numéricas del mismo tamaño (mismas filas y mismas columnas) y devuelve el resultado de restarlas. Para restar dos matrices, hay que restar las posiciones iguales de cada matriz. 
+Implementa la función `es_matriz_identidad`, que recibe una matriz (lista de listas de enteros) y comprueba si es la matriz identidad.
 
-Si las matrices recibidas no tuvieran el mismo tamaño, la función devolvería `None`.
+Una matriz identidad debe cumplir tres condiciones:
+1. Debe ser una matria cuadrada (mismas filas y columnas).
+2. Todos los elementos de la diagonal principal deben ser 1.
+3. El resto de elementos deben ser 0.
 
-Por ejemplo, si las matrices son:
+Se considera que una matriz vacía **no es** una matriz identidad.
+
+Por ejemplo, la siguiente matriz devolvería `True`:
 ```python
-mat1 = [[5, 8, 10],
-        [4, 6, 9],
-        [7, 3, 2]]
-
-mat2 = [[1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]]
+[
+    [1, 0, 0],
+    [0, 1, 0],
+    [0, 0, 1]
+]
 ```
 
-El resultado devuelto será:
-```python
-[[4, 6, 7],
-[0, 1, 3],
-[0, -5, -7]]
-```
+### Ejercicio 6 (1,25 puntos)
+
+Implementa la función `actualiza_stock`, que gestiona el inventario de una tienda tras una serie de ventas. 
+
+La función recibe:
+* **ventas**: Una lista de tuplas, donde cada tupla contiene `(nombre_producto, cantidad_vendida)`.
+* **stock**: Un diccionario donde la clave es el nombre del producto y el valor es la cantidad disponible.
+
+La función debe hacer dos cosas:
+1. **Modificar el diccionario `stock`** restando las cantidades vendidas. Si se intenta vender más de lo que hay, el stock se queda en 0 y se vende solo lo disponible.
+2. **Devolver una lista de tuplas** con los productos y las cantidades que **no** se pudieron vender por falta de stock.
+
+Por ejemplo, con el stock `{"Manzana": 4, "Pan": 5, "Leche": 1}` y las ventas `[("Manzana", 5), ("Pan", 3), ("Leche", 2)]`:
+* El stock pasará a ser: `{"Manzana": 0, "Pan": 2, "Leche": 0}`.
+* La función devolverá: `[("Manzana", 1), ("Leche", 1)]`.
 
 ---
 ---
@@ -111,59 +116,21 @@ En los siguientes ejercicios se utilizará la siguiente `namedtuple`, que repres
 Producto = namedtuple('Producto', [
     'nombre',       # tipo str
     'categoria',    # tipo str
-    'precio'        # tipo float    
+    'precio',       # tipo float
+    'fecha_compra'  # tipo date
 ])
 ```
 
----
-
-### Ejercicio 6 (1,25 puntos)
-
-Implementa la función `calcula_factura`, que para una lista de **productos** calcula el desglose de la factura por categorías, incluyendo para cada categoría el precio total de los productos de esa categoría una vez aplicado el IVA correspondiente. El IVA que debe aplicarse a cada categoría viene indicado por un diccionario **iva_por_categoria**. Si una categoría no está contemplada en el diccionario recibido, se asume un IVA del 21%.
-
-Por ejemplo, si se reciben los **productos**:
-```python
-[Producto(nombre="Camisa", categoria="Ropa", precio=20.0),
- Producto(nombre="Pantalón", categoria="Ropa", precio=30.0),
- Producto(nombre="Libro", categoria="Cultura", precio=15.0),
- Producto(nombre="Película", categoria="Cultura", precio=25.0),
- Producto(nombre="Comida", categoria="Alimentos", precio=10.0)]
- ```
- y el diccionario **iva_por_categoria** siguiente:
-```python
-{"Ropa": 0.10, "Cultura": 0.04}
-```
-
-El resultado devuelto será:
-```python
-{ "Ropa": 55.0,         # Calculado a partir de (20.0 * 1.10) + (30.0 * 1.10)
-  "Cultura": 41.6,      # Calculado a partir de (15.0 * 1.04) + (25.0 * 1.04)
-  "Alimentos": 12.1}    # Calculado a partir de (10.0 * 1.21)
-```
-
----
-
 ### Ejercicio 7 (1,25 puntos)
 
-Implementa la función `busca_producto_mas_caro`, que devuelve el producto más caro de una lista de **productos** y de una **categoria** dada. Si la **categoria** indicada es `None`, se busca el producto más caro de toda la lista de **productos**. 
+Implementa la función `calcula_precio_total_ultimos_dias`. Esta función recibe una lista de **productos**, un número entero de **dias** y una **fecha_actual**.
 
----
+El objetivo es calcular la suma de los precios de todos los productos que hayan sido comprados dentro del rango de los últimos **dias** contados hacia atrás desde la **fecha_actual** (incluyendo el propio día límite).
+
+Por ejemplo, si **dias** es 7, se deben sumar los precios de los productos cuya `fecha_compra` sea mayor o igual a hace 7 días desde la **fecha_actual**.
 
 ### Ejercicio 8 (1,25 puntos)
 
-Implementa la función `calcula_top_categorias`, que calcula el precio total de los **productos** de cada categoría, y devuelve las **n** categorías con el mayor precio total, junto con dichos totales. 
+Implementa la función `categoria_mayor_gasto`, que determina cuál es la categoría en la que se ha gastado más dinero en total.
 
-Por ejemplo, si los **productos** son:
-```python
-[Producto(nombre="Manzana", categoria="Fruta", precio=1.5), 
-Producto(nombre="Pan", categoria="Panadería", precio=2.0), 
-Producto(nombre="Pera", categoria="Fruta", precio=1.8), 
-Producto(nombre="Croissant", categoria="Panadería", precio=3.5),
-Producto(nombre="Leche", categoria="Lácteos", precio=2.2)]
-```
-
-y **n** es 2, el resultado será:
-```python
-[("Panadería", 5.5), ("Fruta", 3.3)]
-```
-    
+La función recibe una lista de **productos** y debe devolver una tupla `(nombre_categoria, gasto_total)`. Si existen varias categorías con el mismo gasto máximo, puedes devolver cualquiera de ellas. Si la lista de productos está vacía, debe devolver `None`.
